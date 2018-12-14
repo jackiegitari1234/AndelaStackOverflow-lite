@@ -20,6 +20,7 @@
 .topnav h {
     float: left;
     font-size: 3em;
+    
 }
 
 .topnav a {
@@ -36,6 +37,59 @@
     background-color: #ddd;
     color: black;
 }
+
+
+
+.allquiz  {
+    width: 70%;
+    float: left;
+    margin-top: 1em;
+    margin-left: 1em;
+    margin-bottom: 20em !important;
+    
+}
+.qstn  {
+    width: 60%;
+    float: left;
+    margin-top: 1em;
+    margin-left: 1em;
+    margin-bottom: 20em !important;
+    
+}
+.allquiz a{
+    text-decoration:none;
+}
+
+.quiz{
+    padding: 1em;
+    border-style: ridge;
+    margin-bottom: 1em;
+} 
+.spesificquiz{
+    padding: 1em;
+    border-style: ridge;
+    margin: 0 auto;
+    margin-top: 1em;
+    font-size: 1.2em;   
+}
+.comments{
+    /* border-style: ridge; */
+    margin: 0 auto;
+    font-size: 1em; 
+    border-top-style: ridge;
+}
+.sidecontent{
+    padding-top: 3em;
+    margin-left: 75%;
+    text-align: left;
+    font-size: 1.2em;
+}
+.qstncontent{
+    padding-top: 3em;
+    margin-left: 70%;
+    text-align: left;
+    font-size: 1.2em;
+}
 .registerpg{
     border-style: ridge;
     width: 50%;
@@ -47,6 +101,7 @@
     padding-left: 1em;
     
 }
+
 .form-control{
     margin-bottom: 1em;
     width: 80%
@@ -75,20 +130,8 @@ label {
     border-radius: 0.5em;
     width:15%
 }
-.allquiz  {
-    width: 70%;
-    float: left;
-    margin-top: 1em;
-    margin-left: 1em;
-    margin-bottom: 20em !important;
-    
-}
-.sidecontent{
-    padding-top: 3em;
-    margin-left: 75%;
-    text-align: left;
-    font-size: 1.2em;
-}
+
+
 .footer{
     position: fixed;
     clear: both;
@@ -96,5 +139,6 @@ label {
     font-size: 1.5em;
     bottom: 0;
    background-color: aqua;
-   padding: 0.1em ;
+   padding: 0.1em 0em;
 }
+
