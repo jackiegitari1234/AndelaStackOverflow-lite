@@ -1,0 +1,47 @@
+.container-fluid, body{
+    font-size: 0.7em;
+    padding: 0px;
+    
+    font-family: Arial, Helvetica, sans-serif;
+    text-align:center;
+    
+    
+}
+#header {
+    background-color:white;
+    padding:1px;
+}
+.topnav {
+    overflow: hidden;
+    background-color: aqua;
+    padding: 1em;
+}
+
+.topnav h {
+    float: left;
+    font-size: 3em;
+}
+
+.topnav a {
+    float: right;
+    color: #141313;
+    text-align: center;
+    padding: 1em 1em;
+    text-decoration: none;
+    font-size: 17px;
+    /* background-color: #ddd; */
+}
+
+.topnav a:hover {
+    background-color: #ddd;
+    color: black;
+}
+.footer{
+    position: fixed;
+    clear: both;
+    width: 100%;
+    
+    bottom: 0;
+   background-color: aqua;
+   padding: 1em;
+}
