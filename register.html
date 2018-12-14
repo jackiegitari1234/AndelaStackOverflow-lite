@@ -1,0 +1,51 @@
+
+<html>
+    <head>
+        <title>StackOverflow-lite</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        <div class="topnav">
+            <h> StackOverflow-lite</h>
+            <a href="index.html">Home</a>
+            <a href="index.html">Login</a>
+            <a href="postquiz.html">Post A Question</a>
+            <a href="#about">About</a>
+        </div>
+        <div class="container">
+        
+            <div class="registerpg" >
+                <div style="color:red;text-align:center"> ALL FIELDS ARE MADATORY</div>
+                <form id="regform" method="post">
+                    <h4 style="text-align:center">PLEASE FILL-IN YOUR PERSONAL DETAILS BELOW</h4>
+                             
+                    <label for="fullname">Fullname <span class="required">*</span> </label>
+                    <input class="form-control " type="name" id="fullname" name="fullname" placeholder="fullname"/>
+                        
+                    <label for="myemail">Email <span class="required">*</span> </label>
+                    <input class="form-control " type="text" id="myemail" name="email" placeholder="example@email.com" />
+                
+                    <label for="mypassword">Password <span class="required">*</span> </label>
+                    <input class="form-control" type="password" id="password" name="password" placeholder="********"/>
+
+                    <label for="cmypassword">Confirm Password <span class="required">*</span></label>
+                    <input class="form-control" type="password" id="cpassword" name="cpass" placeholder="********"/><br>
+                        
+                    
+                    <button class="alert" type="reset" name="cancel">Cacel</button>
+                
+                    <button class="success" type="submit" name="submit"> Submit</button>
+                  
+                </form>
+            </div>
+            
+        </div>
+        <div class="footer">
+            <p>Copyright©StackOverflow-lite.com @2018</p>
+            
+        </div>
+    </body>
+</html>

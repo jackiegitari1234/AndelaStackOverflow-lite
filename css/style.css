@@ -1,7 +1,7 @@
 .container-fluid, body{
     font-size: 0.7em;
     padding: 0px;
-    
+    margin:0px;
     font-family: Arial, Helvetica, sans-serif;
     text-align:center;
     
@@ -36,12 +36,51 @@
     background-color: #ddd;
     color: black;
 }
+.registerpg{
+    border-style: ridge;
+    width: 50%;
+     margin: 0 auto;
+    margin-top: 1em;
+    font-size: 1.5em;
+   
+    text-align: left;
+    padding-left: 1em;
+    
+}
+.form-control{
+    margin-bottom: 1em;
+    width: 80%
+}
+label { 
+    display: block; 
+}
+.alert{
+    color: red;
+    margin: 0.5em;
+    padding: 0.5em;
+    border-radius: 0.5em;
+    width: 17%;
+}
+.info{
+    margin: 0.5em;
+    padding: 0.5em;
+    border-radius: 0.5em;
+    width: 17%;
+}
+
+.success{
+    background-color: #4CAF50;
+    margin: 0.5em;
+    padding: 0.5em;
+    border-radius: 0.5em;
+    width:15%
+}
 .footer{
     position: fixed;
     clear: both;
     width: 100%;
-    
+    font-size: 1.5em;
     bottom: 0;
    background-color: aqua;
-   padding: 1em;
+   padding: 0.1em ;
 }
