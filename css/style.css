@@ -96,15 +96,19 @@
      margin: 0 auto;
     margin-top: 1em;
     font-size: 1.5em;
-   
+    border-radius:0.5em;
     text-align: left;
-    padding-left: 1em;
+    padding: 1em;
     
 }
 
 .form-control{
     margin-bottom: 1em;
-    width: 80%
+    width: 80%;
+    border-radius:0.5em;
+    height:5%;
+    border-style: ridge;
+    padding-left: 0.5em;
 }
 label { 
     display: block; 
@@ -143,5 +147,9 @@ label {
 }
 .required{
     color: red;
+}
+.textarea{
+    border-radius: 1em;
+    padding: 1em;
 }
 
