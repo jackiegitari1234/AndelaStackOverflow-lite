@@ -1,8 +1,5 @@
+'''ENTRY POINT OF THE APP'''
 
-#this is imported from the __init__.py file contained in the subdirectory called app
-from app import create_app 
+from app import APP
 
-app = create_app()
-
-if __name__ == '__main__':
-    app.run()
+APP.run(debug=True)

@@ -1,8 +1,7 @@
-""" app_api """
+'''THIS IS THE GLUE'''
 from flask import Flask
 
+APP = Flask(__name__)
 
-def create_app():
-    app = Flask(__name__)
-    # app.register_blueprint(v1)
-    return app
+from app.api.v1.views.auth_view import v1 as Version1
+APP.register_blueprint(Version1)
