@@ -1,5 +1,7 @@
 '''ENTRY POINT OF THE APP'''
+from app import create_app
 
-from app import APP
+app = create_app()
 
-APP.run(debug=True)
+if __name__ == '__main__':
+    app.run()
