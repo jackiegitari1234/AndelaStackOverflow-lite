@@ -24,6 +24,7 @@ class TestAuthUsers(BaseTest):
             "email":"jackie@gmail.com",
             "password":"FW3fnghv"
         }
+        
         super().setUp()
 
     """ Test register with no input data"""
