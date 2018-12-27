@@ -1,8 +1,9 @@
 '''REGISTER ENDPOINT'''
 
-from flask import jsonify, Blueprint,request
-from app.api.v1.utils.validator import validate_inputs
+from flask import jsonify, Blueprint,request,abort, make_response
+from app.api.v1.utils.validator import encrypt_password,compare_password,confirm_password,validate_inputs
 from .. import version1 as v1
+from ..models.users_model import User,users
 
 validate_inputs = validate_inputs()
 
@@ -13,10 +14,50 @@ def reg_validation():
     data = request.get_json()
 
     if not data:
-        return jsonify({"status": 400, "alert": "Please fill in user information"}), 400
+        return jsonify({"status": 400, "alert": "POST of type Application/JSON expected"}), 400
     
     # Check for empty inputs
-    if not all(field in data for field in ["username", "email", "password"]):
+    if not all(field in data for field in ["username", "email", "password", "confirm_pwrd"]):
+        return jsonify({"status": 400, "alert": "All fields are required"}), 400 
+
+    username = data['username']
+    email = data['email']
+    password = data['password']
+    confirm_pwrd = data['confirm_pwrd']
+
+    # Email validation
+    if not validate_inputs.validate_email(email):
+        return jsonify({"status": 400, "alert": "Please enter a valid email"}), 400
+
+    #password validation
+    if not validate_inputs.validate_password(password):
+        return jsonify({"status": 400, "alert": "Please enter a valid password"}), 400
+
+    #confirm password
+    if not confirm_password(password, confirm_pwrd):
+        return jsonify({"status": 400, "alert": "Please enter a matching password"}), 400
+
+    find_usr = User().find_user(email)
+    if find_usr:
+        return jsonify({"status": 400, "alert": "user alrealdy exists, please use a different email"}), 400
+
+    
+    hash_pwd = encrypt_password(password) #encrypt password
+    user = User(email,username,hash_pwd).add_user() #append user
+    return jsonify(user), 201
+
+
+@v1.route('/login', methods=['POST'])
+def login_validation():
+
+    # Check for json data
+    data = request.get_json()
+
+    if not data:
+        return jsonify({"status": 400, "alert": "POST of type Application/JSON expected"}), 400
+    
+    # Check for empty inputs
+    if not all(field in data for field in ["email", "password"]):
         return jsonify({"status": 400, "alert": "All fields are required"}), 400 
 
     
@@ -31,5 +72,16 @@ def reg_validation():
     if not validate_inputs.validate_password(password):
         return jsonify({"status": 400, "alert": "Please enter a valid password"}), 400
 
-    return jsonify({"status": 201, "message": "Registration successful"}), 201
+    #check if email exists
+    find_usr = User().find_user(email)
+    if not find_usr:
+        abort(make_response(jsonify({"message":"User not Found"}),404))
 
+    #Check if password match
+    if not compare_password(find_usr['password'],password):
+        abort(make_response(jsonify({'message':'Invalid Password'}),400))
+
+    return make_response(jsonify({"message":"Successfully Logged In"}),200)
+       
+    
+        
