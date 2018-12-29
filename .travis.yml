@@ -3,6 +3,11 @@ python:
   - "3.6"
 script:
   - pytest
-
-install:
-- pip install -r requirements.txt
+before_install:
+  - pip install pytest pytest-cov
+  - pip install coveralls
+  - pip install -r requirements.txt
+  # - pip install pytest
+  # - pip install pytest-cov
+after_success:
+  - coveralls
