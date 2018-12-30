@@ -123,9 +123,9 @@ class TestAuthUsers(unittest.TestCase):
         self.assertEqual(result["message"],"Invalid Password")
         self.assertEqual(response.status_code, 400)
 
-    # def test_login_correct_details(self):
-    #     response = self.client.post('api/v1/login',data=json.dumps(self.data7),content_type="application/json")
-    #     self.assertEqual(response.status_code, 200)
+    def test_login_correct_details(self):
+        response = self.client.post('api/v1/login',data=json.dumps(self.data7),content_type="application/json")
+        self.assertEqual(response.status_code, 200)
 
    
 

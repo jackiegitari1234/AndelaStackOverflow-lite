@@ -85,9 +85,9 @@ def login_validation():
         abort(make_response(jsonify({'message':'Invalid Password'}),400))
 
     
-
-    token = jwt.encode({"email": email, 'exp' : datetime.datetime.utcnow()+ datetime.timedelta(minutes=30)}, create_app.config["SECRET_KEY"])
-    return jsonify({"token": token.decode('UTF-8')}), 200
+    else:
+        token = jwt.encode({"email": email, 'exp' : datetime.datetime.utcnow()+ datetime.timedelta(minutes=30)}, create_app.config["SECRET_KEY"])
+        return jsonify({"token": token.decode('UTF-8')}), 200
        
     
         
