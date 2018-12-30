@@ -1,10 +1,12 @@
 questions = [
     {
         "id" : 1,
+        "owner_id" : 1,
         "question" : "what is java?"
     },
     {
         "id" : 2, 
+        "owner_id" : 2,
         "question" : "what is a compiler?",
     }
 ]
@@ -12,12 +14,14 @@ answers = [
     {
         "id" : 1,
         "question_id" : 1,
+        "member_id" : 3,
         "answer" : "A programming language"
     },
     {
         "id" : 2, 
         "question_id" : 1,
-        "answer" : "A server side programming language",
+        "member_id" : 2,
+        "answer" : "A server side programming language"
     }
 ]
 class quiz(object):    

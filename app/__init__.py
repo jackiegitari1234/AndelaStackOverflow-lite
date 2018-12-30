@@ -1,14 +1,14 @@
 '''THIS IS THE GLUE'''
 
+# from flask import Flask
 from flask import Flask
 
-#local import
-from app.api.v1.views.auth_view import v1 as Version1
-from app.api.v1.views.questions_view import v1 as Vers1
+create_app = Flask(__name__)
+create_app.config['SECRET_KEY'] = "uudye78tgde6refs55w7iwtsj"
 
+# local import
+from app.api.v1.views.auth_view import v1 as Version1_auth
+from app.api.v1.views.questions_view import v1 as Version1_questions
 
-def create_app():
-    app = Flask(__name__)
-    app.register_blueprint(Version1)
-    app.register_blueprint(Vers1)
-    return app
+create_app.register_blueprint(Version1_auth)
+create_app.register_blueprint(Version1_questions)

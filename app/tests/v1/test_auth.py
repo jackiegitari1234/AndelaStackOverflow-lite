@@ -4,7 +4,7 @@ from app import create_app
 
 class TestAuthUsers(unittest.TestCase):
     def setUp(self):
-        self.app = create_app()
+        self.app = create_app
         self.client = self.app.test_client()
 
         self.data1 = {
@@ -125,8 +125,6 @@ class TestAuthUsers(unittest.TestCase):
 
     def test_login_correct_details(self):
         response = self.client.post('api/v1/login',data=json.dumps(self.data7),content_type="application/json")
-        result = json.loads(response.data)
-        self.assertEqual(result["message"],"Successfully Logged In")
         self.assertEqual(response.status_code, 200)
 
    
@@ -138,6 +136,3 @@ class TestAuthUsers(unittest.TestCase):
         self.app = None
 
     
-
-# if __name__ == "__main__":
-#     unittest.main()

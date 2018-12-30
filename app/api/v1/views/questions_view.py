@@ -2,9 +2,12 @@
 from app.api.v1.models.questions_model import quiz,questions,answers,answer
 from flask import jsonify,request
 from app.api.v1 import version1 as v1
+from app.api.v1.utils.validator import token_check as check_token
+
 
 #fetch all questions
 @v1.route('/questions', methods=['GET'])
+@check_token
 def fetch_questions():
     ''' Endpoint to fetch all questions'''
 
@@ -77,3 +80,8 @@ def delete_quiz(id):
         questions.remove(quiz[0])
         return jsonify({"status": 200, "question": questions})
     return jsonify({"status":400, "message": "No question with id {} found".format(id)}), 400
+
+#modify an answer to a question
+@v1.route('/questions/<int:id>/answer', methods=['POST'])
+def update_answer(id):
+    return ""
