@@ -2,13 +2,13 @@
 from app.api.v1.models.questions_model import quiz,questions,answers,answer
 from flask import jsonify,request
 from app.api.v1 import version1 as v1
-from app.api.v1.utils.validator import token_check as check_token
+from app.api.v1.utils.validator import token_check
 
 
 #fetch all questions
 @v1.route('/questions', methods=['GET'])
-@check_token
-def fetch_questions():
+@token_check
+def fetch_questions(current_user):
     ''' Endpoint to fetch all questions'''
 
     if len(questions) == 0:
@@ -18,7 +18,8 @@ def fetch_questions():
 
 #post a question
 @v1.route('/questions', methods=['POST'])
-def post_question():
+@token_check
+def post_question(current_user):
 
     # Check for json data
     data = request.get_json()
@@ -31,8 +32,9 @@ def post_question():
         return jsonify({"status": 400, "message": "Please type-in a question"}), 400
 
     question = data['question']
+    current_user = current_user
 
-    question = quiz(question).add_quiz() #append question
+    question = quiz(question,current_user).add_quiz() #append question
     return jsonify(question), 201
 
 
@@ -50,7 +52,8 @@ def get_quiz(id):
 
 #post an answer to a question
 @v1.route('/questions/<int:id>/answer', methods=['POST'])
-def post_answer(id):
+@token_check
+def post_answer(current_user,id):
 
     # Check for json data
     data = request.get_json()
@@ -64,24 +67,46 @@ def post_answer(id):
 
     answr = data['answer']
     question_id = id
+    current_user = current_user
 
     quiz = [question for question in questions if question["id"] == id]
     if quiz:
-        answ = answer(answr,question_id).add_answer() #append answer
+        answ = answer(answr,question_id,current_user).add_answer() #append answer
         answr = [answer for answer in answ if answer["question_id"] == id]
         return jsonify({"status": 201,"answers" : answr})
     return jsonify({"status":400, "message": "No question with id {} found".format(id)}), 400
 
 #delete a question
 @v1.route('/questions/<int:id>', methods=['DELETE'])
-def delete_quiz(id):
-    quiz = [question for question in questions if question["id"] == id]
-    if quiz:
-        questions.remove(quiz[0])
-        return jsonify({"status": 200, "question": questions})
+@token_check
+def delete_quiz(current_user,id):
+    current_user = current_user
+    qstn = [question for question in questions if question["id"] == id]
+    owner = [question for question in questions if question["owner_email"] == current_user]
+    if qstn:
+        if owner:
+            questions.remove(qstn[0])
+            return jsonify({"status": 200, "question": questions})
+        return jsonify({"status":400,"message":"previlige denied"})
     return jsonify({"status":400, "message": "No question with id {} found".format(id)}), 400
 
 #modify an answer to a question
-@v1.route('/questions/<int:id>/answer', methods=['POST'])
-def update_answer(id):
-    return ""
+@v1.route('/questions/<int:questionId>/answers/<int:answerId>', methods=['PUT'])
+@token_check
+def update_answer(current_user,questionId,answerId):
+    current_user = current_user
+    qstn = [question for question in questions if question["id"] == questionId]
+    owner = [question for question in questions if question["id"] == questionId if question["owner_email"] == current_user]
+    answer = [answer for answer in answers if answer["question_id"] == questionId if answer["id"] == answerId]
+    commentor = [answer for answer in answers if answer["question_id"] == questionId if answer["member_email"] == current_user if answer["id"] == answerId]
+
+    if qstn:
+        if owner:
+            if answer:
+                return jsonify({"status": 200, "message": "i own"})
+            return jsonify({"status": 200,"answers":"not a valid answer"})
+        if commentor:
+            return jsonify({"status": 200, "message": "i comment"})
+        return jsonify({"message": "user not authorised"})
+    return jsonify({"status":400, "message": "No question with id {} found".format(questionId)}), 400
+    

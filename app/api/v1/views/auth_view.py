@@ -86,7 +86,7 @@ def login_validation():
 
     
     else:
-        token = jwt.encode({"email": email, 'exp' : datetime.datetime.utcnow()+ datetime.timedelta(minutes=30)}, create_app.config["SECRET_KEY"])
+        token = jwt.encode({"email": email, 'exp' : datetime.datetime.utcnow()+ datetime.timedelta(minutes=300)}, create_app.config["SECRET_KEY"])
         return jsonify({"token": token.decode('UTF-8')}), 200
        
     

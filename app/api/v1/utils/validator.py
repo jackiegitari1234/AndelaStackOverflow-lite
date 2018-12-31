@@ -2,6 +2,9 @@ import re
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from flask import jsonify, request
+from app import create_app
+import datetime
+from flask_jwt import jwt
 
 
 # compare password stored and user input
@@ -55,9 +58,9 @@ def token_check(f):
 
         try:
             data = jwt.decode(token, create_app.config["SECRET_KEY"])
-            current_user = data["public_id"]
+            current_user = data["email"]
 
-        except:
+        except: 
             return jsonify({"message" : "Token is invalid or expired"}), 401
 
         return f(current_user, *args, **kwargs)
