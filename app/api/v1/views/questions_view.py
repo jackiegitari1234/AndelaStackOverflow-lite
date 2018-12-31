@@ -7,8 +7,7 @@ from app.api.v1.utils.validator import token_check
 
 #fetch all questions
 @v1.route('/questions', methods=['GET'])
-@token_check
-def fetch_questions(current_user):
+def fetch_questions():
     ''' Endpoint to fetch all questions'''
 
     if len(questions) == 0:
