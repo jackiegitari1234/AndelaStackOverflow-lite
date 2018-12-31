@@ -96,17 +96,32 @@ def delete_quiz(current_user,id):
 def update_answer(current_user,questionId,answerId):
     current_user = current_user
     qstn = [question for question in questions if question["id"] == questionId]
-    owner = [question for question in questions if question["id"] == questionId if question["owner_email"] == current_user]
     answer = [answer for answer in answers if answer["question_id"] == questionId if answer["id"] == answerId]
+    owner = [question for question in questions if question["id"] == questionId if question["owner_email"] == current_user]
     commentor = [answer for answer in answers if answer["question_id"] == questionId if answer["member_email"] == current_user if answer["id"] == answerId]
+    allanswers = [answer for answer in answers if answer["question_id"] == questionId]
 
     if qstn:
         if owner:
             if answer:
-                return jsonify({"status": 200, "message": "i own"})
+                data = request.get_json()
+                if not data:
+                    return jsonify({"status": 400, "message": "POST of type Application/JSON expected"}), 400
+                if not all(field in data for field in ["answer"]):
+                    return jsonify({"status": 400, "message": "Mark the answer as best"}), 400
+                qstn[0]['status'] = data['status']
+                return jsonify({"status": 200, "message": qstn})
             return jsonify({"status": 200,"answers":"not a valid answer"})
+
         if commentor:
-            return jsonify({"status": 200, "message": "i comment"})
+            data = request.get_json()
+            if not data:
+                return jsonify({"status": 400, "message": "POST of type Application/JSON expected"}), 400
+            if not all(field in data for field in ["answer"]):
+                return jsonify({"status": 400, "message": "Please type-in a answer"}), 400
+            commentor[0]['answer'] = data['answer']
+            return jsonify({"status": 200, "answers": allanswers})
         return jsonify({"message": "user not authorised"})
+
     return jsonify({"status":400, "message": "No question with id {} found".format(questionId)}), 400
     

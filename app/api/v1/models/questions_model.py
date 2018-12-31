@@ -22,6 +22,12 @@ answers = [
         "question_id" : 1,
         "member_email" : "jackie@gmail.com",
         "answer" : "A server side programming language"
+    },
+     {
+        "id" : 3, 
+        "question_id" : 2,
+        "member_email" : "lucy@gmail.com",
+        "answer" : "A server side programming language"
     }
 ]
 class quiz(object):    
@@ -53,7 +59,7 @@ class answer(object):
             "question_id" : self.question_id,
             "id": self.answr_id,
             "answer": self.answer,
-            "current_user" : self.current_user
+            "member_email" : self.current_user
             
         }
         answers.append(answr)
