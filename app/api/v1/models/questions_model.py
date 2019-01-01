@@ -60,12 +60,12 @@ class answer(object):
         self.current_user = current_user
 
     def add_answer(self):
-        answr = {
+        ansr = {
             "question_id" : self.question_id,
             "id": self.answr_id,
             "answer": self.answer,
             "member_email" : self.current_user
             
         }
-        answers.append(answr)
+        answers.append(ansr)
         return answers

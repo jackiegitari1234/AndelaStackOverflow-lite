@@ -1,5 +1,6 @@
 
 from app.api.v1.models.questions_model import quiz,questions,answers,answer
+from app.api.v1.models.questions_model import answer as the_answer
 from flask import jsonify,request
 from app.api.v1 import version1 as v1
 from app.api.v1.utils.validator import token_check
@@ -64,15 +65,15 @@ def post_answer(current_user,id):
     if not all(field in data for field in ["answer"]):
         return jsonify({"status": 400, "message": "Please type-in an answer"}), 400
 
-    answr = data['answer']
+    answer = data['answer']
     question_id = id
     current_user = current_user
 
     quiz = [question for question in questions if question["id"] == id]
     if quiz:
-        answ = answer(answr,question_id,current_user).add_answer() #append answer
+        answ = the_answer(answer,question_id,current_user).add_answer() #append answer
         answr = [answer for answer in answ if answer["question_id"] == id]
-        return jsonify({"status": 201,"answers" : answr})
+        return jsonify({"status": 201,"message":"answer posted successfullY","answers" : answr})
     return jsonify({"status":400, "message": "No question with id {} found".format(id)}), 400
 
 #delete a question
@@ -85,7 +86,7 @@ def delete_quiz(current_user,id):
     if qstn:
         if owner:
             questions.remove(qstn[0])
-            return jsonify({"status": 200, "question": questions})
+            return jsonify({"status": 200,"message":"deleted successfully", "question": questions})
         return jsonify({"status":400,"message":"previlige denied"})
     return jsonify({"status":400, "message": "No question with id {} found".format(id)}), 400
 
