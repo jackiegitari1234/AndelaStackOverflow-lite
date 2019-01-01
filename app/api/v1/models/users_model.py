@@ -11,6 +11,12 @@ users = [
         "username" : "mee",
         "email" : "me@gmail.com",
         "password" : "pbkdf2:sha256:50000$LZJCWWYO$38fff566776fe47851b1f589ca051877dad52edddd9b7d3853e964b2e07678d0"
+    },
+    {
+        "id" : 3, #mee123
+        "username" : "lucy",
+        "email" : "lucy@gmail.com",
+        "password" : "pbkdf2:sha256:50000$LZJCWWYO$38fff566776fe47851b1f589ca051877dad52edddd9b7d3853e964b2e07678d0"
     }
 ]
 

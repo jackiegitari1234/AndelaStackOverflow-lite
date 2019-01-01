@@ -1,5 +1,11 @@
 import re
 from werkzeug.security import generate_password_hash, check_password_hash
+from functools import wraps
+from flask import jsonify, request
+from app import create_app
+import datetime
+from flask_jwt import jwt
+
 
 # compare password stored and user input
 def compare_password(hash_pwrd, password):
@@ -38,4 +44,25 @@ class validate_inputs():
                 total['has_digit'] = 1
 
         return sum(total.values()) == 3
+
+def token_check(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+
+        if "x-access-token" in request.headers:
+            token = request.headers['x-access-token']
+
+        if not token:
+            return jsonify({"message": "Token is missing"}), 401
+
+        try:
+            data = jwt.decode(token, create_app.config["SECRET_KEY"])
+            current_user = data["email"]
+
+        except: 
+            return jsonify({"message" : "Token is invalid or expired"}), 401
+
+        return f(current_user, *args, **kwargs)
+    return decorated
 

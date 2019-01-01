@@ -1,10 +1,11 @@
 import unittest
-import json
+import json, datetime
 from app import create_app
+from flask_jwt import jwt
 
 class TestAuthUsers(unittest.TestCase):
     def setUp(self):
-        self.app = create_app()
+        self.app = create_app
         self.client = self.app.test_client()
 
         self.data1 = {
@@ -80,6 +81,10 @@ class TestAuthUsers(unittest.TestCase):
         response = self.client.post('api/v1/register',data=json.dumps(self.data4),content_type="application/json")
         self.assertEqual(response.status_code, 201) #201 created
 
+    def test_encode_auth_token(self):
+        user_email = self.data7["email"]
+        token = jwt.encode({"email":user_email,'exp' : datetime.datetime.utcnow()+ datetime.timedelta(minutes=300)}, create_app.config["SECRET_KEY"])
+        self.assertTrue(isinstance(token, bytes))
 
     def test_login_nodata(self):
         response = self.client.post('api/v1/login')
@@ -123,11 +128,12 @@ class TestAuthUsers(unittest.TestCase):
         self.assertEqual(result["message"],"Invalid Password")
         self.assertEqual(response.status_code, 400)
 
-    def test_login_correct_details(self):
+    def test_login_generate_token(self):
         response = self.client.post('api/v1/login',data=json.dumps(self.data7),content_type="application/json")
-        result = json.loads(response.data)
-        self.assertEqual(result["message"],"Successfully Logged In")
         self.assertEqual(response.status_code, 200)
+        result = json.loads(response.data)
+        data = jwt.decode(result["token"], create_app.config["SECRET_KEY"])
+        self.assertEqual(data["email"],"me@gmail.com")
 
    
 
@@ -138,6 +144,3 @@ class TestAuthUsers(unittest.TestCase):
         self.app = None
 
     
-
-# if __name__ == "__main__":
-#     unittest.main()

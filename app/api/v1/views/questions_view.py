@@ -1,7 +1,10 @@
 
 from app.api.v1.models.questions_model import quiz,questions,answers,answer
+from app.api.v1.models.questions_model import answer as the_answer
 from flask import jsonify,request
 from app.api.v1 import version1 as v1
+from app.api.v1.utils.validator import token_check
+
 
 #fetch all questions
 @v1.route('/questions', methods=['GET'])
@@ -15,7 +18,8 @@ def fetch_questions():
 
 #post a question
 @v1.route('/questions', methods=['POST'])
-def post_question():
+@token_check
+def post_question(current_user):
 
     # Check for json data
     data = request.get_json()
@@ -28,8 +32,9 @@ def post_question():
         return jsonify({"status": 400, "message": "Please type-in a question"}), 400
 
     question = data['question']
+    current_user = current_user
 
-    question = quiz(question).add_quiz() #append question
+    question = quiz(question,current_user).add_quiz() #append question
     return jsonify(question), 201
 
 
@@ -47,7 +52,8 @@ def get_quiz(id):
 
 #post an answer to a question
 @v1.route('/questions/<int:id>/answer', methods=['POST'])
-def post_answer(id):
+@token_check
+def post_answer(current_user,id):
 
     # Check for json data
     data = request.get_json()
@@ -59,21 +65,63 @@ def post_answer(id):
     if not all(field in data for field in ["answer"]):
         return jsonify({"status": 400, "message": "Please type-in an answer"}), 400
 
-    answr = data['answer']
+    answer = data['answer']
     question_id = id
+    current_user = current_user
 
     quiz = [question for question in questions if question["id"] == id]
     if quiz:
-        answ = answer(answr,question_id).add_answer() #append answer
+        answ = the_answer(answer,question_id,current_user).add_answer() #append answer
         answr = [answer for answer in answ if answer["question_id"] == id]
-        return jsonify({"status": 201,"answers" : answr})
+        return jsonify({"status": 201,"message":"answer posted successfullY","answers" : answr})
     return jsonify({"status":400, "message": "No question with id {} found".format(id)}), 400
 
 #delete a question
 @v1.route('/questions/<int:id>', methods=['DELETE'])
-def delete_quiz(id):
-    quiz = [question for question in questions if question["id"] == id]
-    if quiz:
-        questions.remove(quiz[0])
-        return jsonify({"status": 200, "question": questions})
+@token_check
+def delete_quiz(current_user,id):
+    current_user = current_user
+    qstn = [question for question in questions if question["id"] == id]
+    owner = [question for question in questions if question["owner_email"] == current_user]
+    if qstn:
+        if owner:
+            questions.remove(qstn[0])
+            return jsonify({"status": 200,"message":"deleted successfully", "question": questions})
+        return jsonify({"status":400,"message":"previlige denied"})
     return jsonify({"status":400, "message": "No question with id {} found".format(id)}), 400
+
+#modify an answer to a question
+@v1.route('/questions/<int:questionId>/answers/<int:answerId>', methods=['PUT'])
+@token_check
+def update_answer(current_user,questionId,answerId):
+    current_user = current_user
+    qstn = [question for question in questions if question["id"] == questionId]
+    answer = [answer for answer in answers if answer["question_id"] == questionId if answer["id"] == answerId]
+    owner = [question for question in questions if question["id"] == questionId if question["owner_email"] == current_user]
+    commentor = [answer for answer in answers if answer["question_id"] == questionId if answer["member_email"] == current_user if answer["id"] == answerId]
+    allanswers = [answer for answer in answers if answer["question_id"] == questionId]
+
+    if qstn:
+        if owner:
+            if answer:
+                data = request.get_json()
+                if not data:
+                    return jsonify({"status": 400, "message": "POST of type Application/JSON expected"}), 400
+                if not all(field in data for field in ["answer"]):
+                    return jsonify({"status": 400, "message": "Mark the answer as best"}), 400
+                qstn[0]['status'] = data['status']
+                return jsonify({"status": 200, "message": qstn})
+            return jsonify({"status": 200,"answers":"not a valid answer"})
+
+        if commentor:
+            data = request.get_json()
+            if not data:
+                return jsonify({"status": 400, "message": "POST of type Application/JSON expected"}), 400
+            if not all(field in data for field in ["answer"]):
+                return jsonify({"status": 400, "message": "Please type-in a answer"}), 400
+            commentor[0]['answer'] = data['answer']
+            return jsonify({"status": 200, "answers": allanswers})
+        return jsonify({"message": "user not authorised"})
+
+    return jsonify({"status":400, "message": "No question with id {} found".format(questionId)}), 400
+    

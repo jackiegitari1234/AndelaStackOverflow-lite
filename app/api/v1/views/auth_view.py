@@ -4,6 +4,9 @@ from flask import jsonify, Blueprint,request,abort,make_response
 from app.api.v1.utils.validator import encrypt_password,compare_password,confirm_password,validate_inputs
 from app.api.v1 import version1 as v1
 from app.api.v1.models.users_model import User,users
+from app import create_app
+import datetime
+from flask_jwt import jwt
 
 validate_inputs = validate_inputs()
 
@@ -81,7 +84,10 @@ def login_validation():
     if not compare_password(find_usr['password'],password):
         abort(make_response(jsonify({'message':'Invalid Password'}),400))
 
-    return make_response(jsonify({"message":"Successfully Logged In"}),200)
+    
+    else: #has a header,payload,signature
+        token = jwt.encode({"email": email, 'exp' : datetime.datetime.utcnow()+ datetime.timedelta(minutes=300)}, create_app.config["SECRET_KEY"])
+        return jsonify({"token": token.decode('UTF-8')}), 200
        
     
         
