@@ -9,5 +9,3 @@ install:
 script:
   - export FLASK_ENV=development
   - pytest
-after_success:
-  - coveralls
