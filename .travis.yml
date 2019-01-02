@@ -8,6 +8,6 @@ install:
   - pip install -r requirements.txt
 script:
   - export FLASK_ENV=development
-  - pytest
+  - py.test --cov
 after_success:
   - coveralls
