@@ -132,7 +132,7 @@ class TestAuthUsers(unittest.TestCase):
         response = self.client.post('api/v1/login',data=json.dumps(self.data7),content_type="application/json")
         self.assertEqual(response.status_code, 200)
         result = json.loads(response.data)
-        data = jwt.decode(result["token"], create_app.config["SECRET_KEY"])
+        data = jwt.decode(result["token"], create_app.config["SECRET_KEY"], options={"verify_iat": False},algorithms="HS256")
         self.assertEqual(data["email"],"me@gmail.com")
 
    

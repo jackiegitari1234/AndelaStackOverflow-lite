@@ -57,7 +57,7 @@ def token_check(f):
             return jsonify({"message": "Token is missing"}), 401
 
         try:
-            data = jwt.decode(token, create_app.config["SECRET_KEY"])
+            data = jwt.decode(token, create_app.config["SECRET_KEY"], options={"verify_iat": False},algorithms="HS256")
             current_user = data["email"]
 
         except: 
